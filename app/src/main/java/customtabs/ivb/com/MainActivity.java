@@ -7,6 +7,7 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -31,11 +32,15 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 String mUrl = url.getText().toString();
-                                Uri uri = Uri.parse(mUrl);
-                                boolean maylaunch = customTabsSession.mayLaunchUrl(uri, null, null);
-                                CustomTabsIntent obj = new CustomTabsIntent.Builder(customTabsSession).build();
-                                obj.launchUrl(MainActivity.this, uri);
-
+                                if (mUrl.length() > 4) { //assume http or https
+                                    Uri uri = Uri.parse(mUrl);
+                                    boolean maylaunch = customTabsSession.mayLaunchUrl(uri, null, null);
+                                    CustomTabsIntent obj = new CustomTabsIntent.Builder(customTabsSession).build();
+                                    obj.launchUrl(MainActivity.this, uri);
+                                } else {
+                                    Snackbar snackbar = Snackbar.make(v, "Not A Valid URL", Snackbar.LENGTH_LONG);
+                                    snackbar.show();
+                                }
                             }
                         });
                     }
